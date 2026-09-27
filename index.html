@@ -1,0 +1,427 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+<title>Missão Cofrinho</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+:root{
+  --sky:#27B8F0; --sky-dark:#1592C9; --ink:#1B1633; --paper:#FFFFFF; --sun:#FFD23F; --pink:#FF4F8B; --green:#2FC46A; --orange:#FF8A34; --lilac:#8C6CFF; --soft:#F2F6FF; --muted:#5B5A7A;
+  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",sans-serif;
+  --body:"Nunito","Trebuchet MS","Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{margin:0;font-family:var(--body);color:var(--ink);font-weight:700;
+  background-color:var(--sky);
+  background-image:radial-gradient(rgba(255,255,255,.22) 2px,transparent 2.5px);background-size:26px 26px;
+  padding-inline:16px;padding-block:18px 40px;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1100px;margin:0 auto}
+.sticker{background:var(--paper);border:4px solid var(--ink);border-radius:22px;box-shadow:7px 7px 0 var(--ink)}
+.big-btn{font-family:var(--display);font-size:24px;letter-spacing:.5px;background:var(--sun);border:4px solid var(--ink);border-radius:16px;padding:14px 30px;box-shadow:5px 5px 0 var(--ink);transition:transform .1s,box-shadow .1s}
+.big-btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}
+.big-btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+.big-btn.pink{background:var(--pink);color:#fff}
+.big-btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:5px 5px 0 var(--ink)}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.3px}
+
+/* ---------- START ---------- */
+#start{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;min-height:calc(100vh - 60px)}
+.title-block h1{font-size:clamp(52px,8vw,96px);line-height:.95;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:6px 6px 0 var(--ink)}
+.title-block h1 span{color:var(--sun);display:block}
+.tagline{font-size:20px;color:var(--ink);background:var(--sun);display:inline-block;padding:6px 14px;border:3px solid var(--ink);border-radius:12px;transform:rotate(-2deg);margin:18px 0 22px}
+.rules{padding:18px 20px;display:grid;gap:10px;font-size:16.5px}
+.rules div{display:flex;gap:12px;align-items:flex-start}
+.rules b.n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;border:3px solid var(--ink);font-family:var(--display);font-weight:400}
+.pick{padding:20px;display:grid;gap:14px}
+.pick h2{font-size:28px}
+.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.goal{background:var(--soft);border:4px solid var(--ink);border-radius:18px;padding:12px 8px;display:grid;justify-items:center;gap:4px;transition:transform .12s}
+.goal:hover{transform:translateY(-3px)}
+.goal .em{font-size:48px;line-height:1.1}
+.goal .gn{font-size:15px}
+.goal .gv{font-family:var(--display);font-size:22px}
+.goal[aria-pressed="true"]{background:var(--sun);box-shadow:4px 4px 0 var(--ink)}
+.pig-hero{display:grid;place-items:center;position:relative}
+.pig-hero svg{width:min(100%,430px);height:auto;filter:drop-shadow(8px 8px 0 rgba(27,22,51,.9));animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-12px) rotate(-2deg)}}
+.falling{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.fcoin{position:absolute;top:-10%;width:42px;height:42px;border-radius:50%;background:var(--sun);border:4px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-size:16px;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:1}70%{opacity:1}100%{transform:translateY(300px) rotate(360deg);opacity:0}}
+
+/* ---------- GAME ---------- */
+#game{display:grid;gap:18px}
+.hud{display:grid;grid-template-columns:auto 1fr 1fr 1.4fr 1fr;gap:12px}
+.stat{padding:10px 14px;display:grid;gap:2px;align-content:center}
+.stat .lb{font-size:12.5px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.stat .vl{font-family:var(--display);font-size:28px;line-height:1.1}
+.stat.week{background:var(--pink);color:#fff;text-align:center}
+.stat.week .lb{color:#fff}
+.stat.wallet{background:var(--sun)}
+.stat.wallet .lb{color:var(--ink)}
+.stat.cofre{grid-template-columns:auto 1fr;column-gap:10px;align-items:center}
+.stat.cofre svg{width:64px;height:auto;grid-row:span 3}
+.meta-bar{height:14px;border:3px solid var(--ink);border-radius:99px;background:var(--soft);overflow:hidden}
+.meta-bar span{display:block;height:100%;background:var(--green);transition:width .7s cubic-bezier(.3,1.4,.5,1)}
+.hearts{font-size:24px;letter-spacing:2px;line-height:1.2}
+.hearts .off{filter:grayscale(1);opacity:.3}
+.pending{font-size:13px;color:var(--orange)}
+
+.stage{display:grid;grid-template-columns:1.05fr 1fr;overflow:hidden}
+.scene{position:relative;border-right:4px solid var(--ink);min-height:360px;display:grid}
+.scene svg{width:100%;height:100%;display:block}
+.chip{position:absolute;left:14px;top:14px;background:var(--ink);color:#fff;border-radius:10px;padding:5px 12px;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+.panel{padding:24px 24px 26px;display:grid;gap:14px;align-content:start}
+.panel h2{font-size:clamp(26px,3vw,34px);line-height:1.1}
+.panel p{margin:0;font-size:18px;line-height:1.5;font-weight:600}
+.choices{display:grid;gap:10px}
+.choice{text-align:left;background:var(--soft);border:3px solid var(--ink);border-radius:14px;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:16.5px;transition:transform .1s,background .1s}
+.choice:hover:not(:disabled){background:#FFF6CC;transform:translateX(4px)}
+.choice .price{font-family:var(--display);font-size:18px;white-space:nowrap;padding:3px 10px;border-radius:10px;border:3px solid var(--ink);background:#fff}
+.choice .price.g{background:var(--green);color:#fff}
+.choice .price.r{background:var(--pink);color:#fff}
+.choice small{display:block;color:var(--muted);font-weight:600;font-size:13.5px;margin-top:2px}
+.choice:disabled{opacity:.45;cursor:not-allowed}
+.save-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.save-row .choice{grid-template-columns:1fr;text-align:center;justify-items:center;font-family:var(--display);font-size:24px;padding:14px 6px}
+.save-row .choice small{font-family:var(--body);font-size:12.5px}
+.receipt{background:var(--soft);border:3px dashed var(--ink);border-radius:14px;padding:12px 16px;display:grid;gap:4px;font-size:16px}
+.receipt div{display:flex;justify-content:space-between;gap:10px}
+.receipt .plus{color:#138A45}.receipt .minus{color:#D12A63}
+.lesson{background:var(--sun);border:4px solid var(--ink);border-radius:16px;padding:14px 16px;font-size:16.5px;line-height:1.5;box-shadow:4px 4px 0 var(--ink)}
+.lesson b{font-family:var(--display);font-weight:400;font-size:19px;display:block;margin-bottom:2px}
+.effects{display:flex;flex-wrap:wrap;gap:8px}
+.eff{border:3px solid var(--ink);border-radius:99px;padding:4px 12px;font-size:15px;background:#fff}
+.eff.up{background:#C9F6DA}.eff.down{background:#FFD3E1}
+.row-end{display:flex;justify-content:flex-end}
+
+.pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.float-txt{position:fixed;font-family:var(--display);font-size:30px;pointer-events:none;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;animation:up 1.1s ease-out forwards;z-index:10}
+@keyframes up{to{transform:translateY(-80px);opacity:0}}
+
+/* ---------- END ---------- */
+#end{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.end-card{padding:26px;display:grid;gap:16px}
+.end-card h1{font-size:clamp(40px,5vw,60px);line-height:1}
+.stars{font-size:62px;letter-spacing:6px;line-height:1}
+.stars .off{filter:grayscale(1);opacity:.25}
+.badge{justify-self:start;background:var(--lilac);color:#fff;font-family:var(--display);font-size:24px;padding:8px 18px;border:4px solid var(--ink);border-radius:14px;transform:rotate(-2deg);box-shadow:4px 4px 0 var(--ink)}
+.checks{display:grid;gap:10px}
+.check{display:flex;gap:12px;align-items:center;font-size:17px;background:var(--soft);border:3px solid var(--ink);border-radius:14px;padding:10px 14px}
+.check .ic{flex:none;width:34px;height:34px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-family:var(--display);color:#fff}
+.check.ok .ic{background:var(--green)}.check.no .ic{background:var(--pink)}
+.learn{padding:22px;display:grid;gap:12px}
+.learn h2{font-size:28px}
+.learn ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.learn li{display:flex;gap:10px;font-size:16px;line-height:1.45;font-weight:600}
+.learn li b{flex:none;font-family:var(--display);font-weight:400;background:var(--sky);color:#fff;border:3px solid var(--ink);border-radius:10px;padding:0 8px;height:fit-content}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:20}
+.sound{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));background:#fff;border:3px solid var(--ink);border-radius:12px;padding:6px 12px;font-size:14px;box-shadow:3px 3px 0 var(--ink);z-index:5}
+
+@media (max-width:960px){
+  .hud{grid-template-columns:repeat(2,1fr)}.stat.cofre{grid-column:1/-1}.stat.happy{grid-column:1/-1}
+  .stage{grid-template-columns:1fr}.scene{border-right:none;border-bottom:4px solid var(--ink);min-height:240px}
+  #start,#end{grid-template-columns:1fr}.pig-hero{order:-1}.pig-hero svg{width:min(80%,300px)}
+}
+@media (max-width:520px){.goals{grid-template-columns:1fr}.save-row{grid-template-columns:repeat(2,1fr)}.stars{font-size:46px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head><body>
+<div class="wrap">
+  <!-- START -->
+  <section id="start">
+    <div>
+      <div class="title-block">
+        <h1>Missão <span>Cofrinho</span></h1>
+        <div class="tagline">8 semanas · R$ 40 por semana · 1 meta</div>
+      </div>
+      <div class="sticker rules">
+        <div><b class="n">1</b><span>Toda semana você ganha <b>R$ 40</b> de mesada e decide quanto guardar no cofrinho.</span></div>
+        <div><b class="n">2</b><span>Aparecem situações da vida real: promoções, amigos, golpes e imprevistos. Você escolhe o que fazer.</span></div>
+        <div><b class="n">3</b><span>Chegue ao fim com a <b>meta</b> no cofrinho, <b>feliz</b> e <b>sem dívidas</b> para ganhar 3 estrelas.</span></div>
+      </div>
+    </div>
+    <div style="display:grid;gap:22px">
+      <div class="pig-hero">
+        <div class="falling" id="falling"></div>
+        <svg viewBox="0 0 300 240" id="pigHero"></svg>
+      </div>
+      <div class="sticker pick">
+        <h2>Escolha sua meta</h2>
+        <div class="goals" id="goals"></div>
+        <button class="big-btn pink" id="startBtn" disabled>Começar missão</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" hidden>
+    <div class="hud">
+      <div class="sticker stat week"><span class="lb">Semana</span><span class="vl num" id="hWeek">1/8</span></div>
+      <div class="sticker stat wallet"><span class="lb">Carteira</span><span class="vl num" id="hWallet">R$ 0</span></div>
+      <div class="sticker stat"><span class="lb">No cofrinho</span><span class="vl num" id="hCofre">R$ 0</span></div>
+      <div class="sticker stat cofre">
+        <svg viewBox="0 0 300 240" id="pigMini"></svg>
+        <span class="lb" id="hMetaName">Meta</span>
+        <div class="meta-bar"><span id="hMetaBar" style="width:0%"></span></div>
+        <span class="pending num" id="hMetaTxt"></span>
+      </div>
+      <div class="sticker stat happy"><span class="lb">Felicidade</span><span class="hearts" id="hHearts"></span><span class="pending" id="hParc"></span></div>
+    </div>
+    <div class="sticker stage">
+      <div class="scene" id="scene"></div>
+      <div class="panel" id="panel"></div>
+    </div>
+  </section>
+
+  <!-- END -->
+  <section id="end" hidden>
+    <div class="sticker end-card" id="endCard"></div>
+    <div class="sticker learn" id="learn"></div>
+  </section>
+</div>
+<canvas id="confetti"></canvas>
+<button class="sound" id="soundBtn" aria-pressed="true">Som: ligado</button>
+
+<script>
+const $=id=>document.getElementById(id);
+const brl=v=>(v<0?'−R$ ':'R$ ')+Math.abs(v).toFixed(v%1?2:0).replace('.',',');
+
+/* ---------- sound ---------- */
+let AC=null, soundOn=true;
+function beep(f=660,d=.09,type='square',vol=.06){ if(!soundOn) return; try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); const o=AC.createOscillator(),g=AC.createGain(); o.type=type;o.frequency.value=f;g.gain.value=vol;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d);}catch(e){} }
+const sfx={coin:()=>{beep(988,.08);setTimeout(()=>beep(1319,.14),80)},bad:()=>{beep(220,.18,'sawtooth',.05)},click:()=>beep(520,.05,'triangle',.05),win:()=>[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.16),i*120))};
+$('soundBtn').onclick=()=>{soundOn=!soundOn;$('soundBtn').textContent='Som: '+(soundOn?'ligado':'desligado');$('soundBtn').setAttribute('aria-pressed',soundOn)};
+
+/* ---------- pig illustration ---------- */
+function pigSVG(level,uid){ // level 0..1
+  const h=150*Math.max(0,Math.min(1,level)), y=205-h;
+  return `<defs><clipPath id="body${uid}"><ellipse cx="150" cy="130" rx="110" ry="78"/></clipPath></defs>
+  <g stroke="#1B1633" stroke-width="7" stroke-linejoin="round">
+    <rect x="78" y="180" width="30" height="40" rx="8" fill="#FF8FB5"/><rect x="190" y="180" width="30" height="40" rx="8" fill="#FF8FB5"/>
+    <path d="M92 70 L78 22 L128 54 Z" fill="#FF6FA0"/><path d="M208 70 L222 22 L172 54 Z" fill="#FF6FA0"/>
+    <ellipse cx="150" cy="130" rx="110" ry="78" fill="#FFB3CD"/>
+  </g>
+  <g clip-path="url(#body${uid})"><rect x="30" y="${y}" width="240" height="${h+10}" fill="#FFD23F" style="transition:all .7s"/>
+    <g fill="#F2A900">${[0,1,2,3,4,5].map(i=>`<circle cx="${60+i*36}" cy="${y+14}" r="9"/>`).join('')}</g></g>
+  <ellipse cx="150" cy="130" rx="110" ry="78" fill="none" stroke="#1B1633" stroke-width="7"/>
+  <rect x="122" y="54" width="56" height="12" rx="6" fill="#1B1633"/>
+  <g stroke="#1B1633" stroke-width="7"><ellipse cx="258" cy="132" rx="26" ry="30" fill="#FF8FB5"/></g>
+  <ellipse cx="252" cy="124" rx="5" ry="8" fill="#1B1633"/><ellipse cx="266" cy="124" rx="5" ry="8" fill="#1B1633"/>
+  <circle cx="214" cy="100" r="9" fill="#1B1633"/><circle cx="217" cy="97" r="3" fill="#fff"/>
+  <path d="M48 122 q-26 -6 -20 -26 q6 -14 18 -4" fill="none" stroke="#1B1633" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="206" cy="146" rx="14" ry="8" fill="#FF6FA0" opacity=".7"/>`;
+}
+
+/* ---------- scenes ---------- */
+function scene(bg,accent,main,props,label){
+  const deco=props.map(([e,x,y,s])=>`<text x="${x}" y="${y}" font-size="${s}" text-anchor="middle" dominant-baseline="central">${e}</text>`).join('');
+  return `<span class="chip">${label}</span><svg viewBox="0 0 480 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${label}">
+  <rect width="480" height="380" fill="${bg}"/>
+  <g opacity=".25" fill="#fff">${Array.from({length:14},(_,i)=>`<circle cx="${(i*83)%480}" cy="${(i*57)%380}" r="${6+(i%4)*4}"/>`).join('')}</g>
+  <rect x="0" y="300" width="480" height="80" fill="${accent}" stroke="#1B1633" stroke-width="6"/>
+  <circle cx="240" cy="180" r="118" fill="#fff" stroke="#1B1633" stroke-width="7"/>
+  <circle cx="240" cy="180" r="96" fill="${accent}" opacity=".35"/>
+  <text x="240" y="186" font-size="130" text-anchor="middle" dominant-baseline="central" class="pop">${main}</text>
+  ${deco}</svg>`;
+}
+
+/* ---------- data ---------- */
+const GOALS=[
+  {id:'fone',em:'🎧',nome:'Fone sem fio',valor:120},
+  {id:'skate',em:'🛹',nome:'Skate',valor:160},
+  {id:'jogo',em:'🎮',nome:'Jogo novo',valor:90},
+];
+const EVENTS=[
+ {tag:'Promoção',bg:'#FF8A34',ac:'#FFD23F',main:'👟',props:[['🏷️',80,70,56],['⏰',400,80,50],['💥',400,270,44]],
+  t:'Só hoje: tênis com 30% OFF!',
+  p:'Um anúncio grita: de R$ 150 por R$ 105. "Últimas unidades!" Seu tênis atual ainda está bom.',
+  ops:[
+   {txt:'Comprar à vista',sub:'Leva agora',cost:105,f:+1,lic:['Urgência','Promoções com "só hoje" criam pressa para você não pensar. Seu tênis ainda estava bom: foi um desejo, não uma necessidade.']},
+   {txt:'Parcelar em 3× de R$ 38',sub:'Paga nas próximas 3 semanas',parc:{n:3,v:38},f:+1,lic:['Parcelamento','3 × R$ 38 = R$ 114. Você pagou R$ 9 a mais e comprometeu a mesada das próximas semanas.']},
+   {txt:'Esperar e pensar',sub:'Não compra agora',f:0,lic:['Compra por impulso','Esperar um dia é a melhor arma contra o "só hoje". Se ainda quiser depois, é porque vale a pena.']},
+  ]},
+ {tag:'Escola',bg:'#2FC46A',ac:'#C9F6DA',main:'🥪',props:[['🧃',90,90,52],['🍪',400,90,50],['🏫',400,260,50]],
+  t:'O lanche da semana',
+  p:'A cantina cobra R$ 8 por dia. São 5 dias de aula. Dá para levar lanche de casa em alguns dias.',
+  ops:[
+   {txt:'Cantina todos os dias',sub:'5 × R$ 8',cost:40,f:+1,lic:['Gastos pequenos','R$ 8 parece pouco, mas 5 dias viram R$ 40. Gastos pequenos repetidos pesam muito no mês.']},
+   {txt:'Cantina 2 dias, casa 3 dias',sub:'2 × R$ 8',cost:16,f:+1,lic:['Equilíbrio','Trocar só alguns dias já economizou R$ 24 na semana. Em 4 semanas seriam R$ 96!']},
+   {txt:'Levar de casa todo dia',sub:'Sem gasto',cost:0,f:-1,lic:['Economia com limite','Economizou tudo, mas ficou meio chateado. Guardar dinheiro também precisa ser gostoso, senão a gente desiste.']},
+  ]},
+ {tag:'Amigos',bg:'#8C6CFF',ac:'#E2DAFF',main:'🎁',props:[['🎂',90,80,54],['🎈',400,70,54],['🎉',400,270,48]],
+  t:'Aniversário do melhor amigo',
+  p:'Seu melhor amigo faz aniversário no sábado. Você quer dar um presente.',
+  ops:[
+   {txt:'Presente de loja',sub:'Camiseta do time',cost:35,f:+1,lic:['Planejamento','Presentes e datas especiais podem ser previstos. Quem planeja não é pego de surpresa.']},
+   {txt:'Chocolate + cartão feito à mão',sub:'Criatividade',cost:12,f:+2,lic:['Valor x preço','Um presente pensado com carinho pode valer mais do que um caro. Valor não é o mesmo que preço.']},
+   {txt:'Não ir à festa',sub:'Economiza tudo',cost:0,f:-2,lic:['Dinheiro e amizade','Economizar não pode custar os momentos importantes. Dinheiro serve para a vida, não o contrário.']},
+  ]},
+ {tag:'Celular',bg:'#FF4F8B',ac:'#FFD3E1',main:'📱',props:[['⚔️',90,80,50],['💎',400,80,50],['✨',400,270,48]],
+  t:'Skin lendária no jogo',
+  p:'Seu jogo favorito lançou uma skin por R$ 25. Todo mundo da turma está comprando.',
+  ops:[
+   {txt:'Comprar a skin',sub:'Fica igual à turma',cost:25,f:+1,lic:['Gastos invisíveis','Compras dentro de jogos parecem pequenas e somem da cabeça. Anote tudo: o dinheiro digital também acaba.']},
+   {txt:'Não comprar',sub:'Jogar com a skin grátis',cost:0,f:0,lic:['Pressão do grupo','"Todo mundo tem" não é motivo para comprar. Decidir sozinho é sinal de maturidade.']},
+  ]},
+ {tag:'Oportunidade',bg:'#FFD23F',ac:'#FFF3B0',main:'🍫',props:[['💰',90,80,52],['📦',400,80,50],['🤝',400,270,48]],
+  t:'Vender brigadeiros na escola',
+  p:'Você pode gastar R$ 20 em ingredientes, fazer 30 brigadeiros e vender cada um por R$ 2.',
+  ops:[
+   {txt:'Topar o negócio',sub:'Custo R$ 20 · vende 25',cost:20,gain:50,f:+1,lic:['Lucro','Vendeu 25 × R$ 2 = R$ 50. Lucro = R$ 50 − R$ 20 = R$ 30. Empreender é fazer o dinheiro trabalhar para você.']},
+   {txt:'Deixar para lá',sub:'Sem risco',cost:0,f:0,lic:['Custo de oportunidade','Não perdeu nada, mas também não ganhou. Às vezes o maior custo é a chance que passou.']},
+  ]},
+ {tag:'Alerta',bg:'#1B1633',ac:'#FF4F8B',main:'⚠️',props:[['💬',90,80,52],['🎣',400,80,52],['🔒',400,270,48]],
+  t:'"Você ganhou R$ 500!"',
+  p:'Chega uma mensagem: "Parabéns! Pague só R$ 20 de taxa por Pix e receba R$ 500 hoje."',
+  ops:[
+   {txt:'Pagar a taxa',sub:'Para receber o prêmio',cost:20,f:-2,golpe:true,lic:['Golpe!','Era golpe. Ninguém dá prêmio pedindo taxa antes. Se é bom demais para ser verdade, desconfie.']},
+   {txt:'Ignorar e mostrar para a família',sub:'Proteger todo mundo',cost:0,f:+1,lic:['Segurança digital','Certo! Prêmio que pede pagamento antes é golpe. Mostrar para a família protege os adultos também.']},
+  ]},
+ {tag:'Imprevisto',bg:'#27B8F0',ac:'#CFF0FF',main:'🚲',props:[['🔧',90,80,52],['💥',400,80,50],['😬',400,270,48]],
+  t:'O pneu da bike furou',
+  p:'Você usa a bicicleta para ir à escola. O conserto custa R$ 30.',
+  ops:[
+   {txt:'Consertar',sub:'Se faltar, sai do cofrinho',cost:30,f:0,lic:['Reserva de emergência','Imprevistos acontecem. Quem tem uma reserva guardada resolve o problema sem desespero.']},
+   {txt:'Ir a pé até o fim do mês',sub:'Acorda 30 min mais cedo',cost:0,f:-2,lic:['Adiar tem custo','Economizou, mas ficou cansado todo dia. Às vezes gastar com o necessário é a melhor escolha.']},
+  ]},
+ {tag:'Pesquisa',bg:'#2FC46A',ac:'#C9F6DA',main:'📓',props:[['🔍',90,80,52],['🛒',400,80,50],['🚚',400,270,48]],
+  t:'Caderno novo: onde comprar?',
+  p:'Papelaria: R$ 20. Site: R$ 14 + R$ 8 de frete. Mercado do bairro: R$ 16.',
+  ops:[
+   {txt:'Papelaria',sub:'R$ 20',cost:20,f:0,lic:['Comparar preços','Pagou R$ 4 a mais que no mercado. Pesquisar antes de comprar é dinheiro no bolso.']},
+   {txt:'Site com frete',sub:'R$ 14 + R$ 8',cost:22,f:0,lic:['Custo escondido','O mais barato virou o mais caro! Sempre some frete e taxas antes de decidir.']},
+   {txt:'Mercado do bairro',sub:'R$ 16',cost:16,f:+1,lic:['Boa pesquisa','Isso! Somando tudo, o mercado era o mais barato. Comparar o preço final é o segredo.']},
+  ]},
+];
+const MESADA=40, WEEKS=EVENTS.length;
+
+/* ---------- state ---------- */
+let S;
+function novo(goal){ S={goal,sem:0,carteira:0,cofre:0,feliz:3,parc:[],licoes:[],golpe:false,divida:false,resumo:[]}; }
+
+/* ---------- start screen ---------- */
+$('pigHero').innerHTML=pigSVG(.55,'h');
+$('falling').innerHTML=Array.from({length:6},(_,i)=>`<div class="fcoin" style="left:${10+i*15}%;animation-duration:${2.6+i*.4}s;animation-delay:${i*.5}s">$</div>`).join('');
+let chosen=null;
+$('goals').innerHTML=GOALS.map(g=>`<button class="goal" data-id="${g.id}" aria-pressed="false"><span class="em">${g.em}</span><span class="gn">${g.nome}</span><span class="gv">R$ ${g.valor}</span></button>`).join('');
+$('goals').onclick=e=>{const b=e.target.closest('.goal');if(!b)return;sfx.click();chosen=GOALS.find(g=>g.id===b.dataset.id);
+  $('goals').querySelectorAll('.goal').forEach(x=>x.setAttribute('aria-pressed',x===b));$('startBtn').disabled=false;};
+$('startBtn').onclick=()=>{sfx.coin();novo(chosen);$('start').hidden=true;$('end').hidden=true;$('game').hidden=false;semana();};
+
+/* ---------- HUD ---------- */
+function hud(){
+  $('hWeek').textContent=`${Math.min(S.sem+1,WEEKS)}/${WEEKS}`;
+  $('hWallet').textContent=brl(S.carteira);
+  $('hCofre').textContent=brl(S.cofre);
+  const pct=Math.min(1,S.cofre/S.goal.valor);
+  $('hMetaName').textContent=`${S.goal.em} ${S.goal.nome}`;
+  $('hMetaBar').style.width=(pct*100)+'%';
+  $('hMetaTxt').textContent=pct>=1?'Meta alcançada!':`faltam ${brl(S.goal.valor-S.cofre)}`;
+  $('pigMini').innerHTML=pigSVG(pct,'m');
+  $('hHearts').innerHTML=Array.from({length:5},(_,i)=>`<span class="${i<S.feliz?'':'off'}">❤️</span>`).join('');
+  const p=S.parc.reduce((a,x)=>a+x.n,0);
+  $('hParc').textContent=p?`${p} parcela${p>1?'s':''} a pagar`:'';
+}
+function floatTxt(txt,color,el){const r=(el||$('panel')).getBoundingClientRect();const d=document.createElement('div');d.className='float-txt';d.style.color=color;d.textContent=txt;d.style.left=(r.left+r.width/2-40)+'px';d.style.top=(r.top+30)+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1200);}
+
+/* ---------- phase 1: mesada + guardar ---------- */
+function semana(){
+  S.carteira+=MESADA;
+  const linhas=[`<div><span>Mesada da semana</span><span class="plus num">+ ${brl(MESADA)}</span></div>`];
+  S.parc.forEach(p=>{
+    let v=p.v; if(S.carteira>=v){S.carteira-=v;} else {let falta=v-S.carteira;S.carteira=0; if(S.cofre>=falta){S.cofre-=falta;} else {S.cofre=0;S.divida=true;}}
+    p.n--; linhas.push(`<div><span>Parcela do tênis</span><span class="minus num">− ${brl(v)}</span></div>`);
+  });
+  S.parc=S.parc.filter(p=>p.n>0);
+  hud(); sfx.coin(); floatTxt('+R$ 40','#FFD23F',$('hWallet'));
+  $('scene').innerHTML=scene('#FFD23F','#FFF3B0','🐷',[['🪙',90,80,56],['🪙',400,90,48],['💵',400,270,52],['🪙',80,270,44]],`Semana ${S.sem+1}`);
+  const opts=[0,10,20,30].map(v=>`<button class="choice" data-v="${v}" ${v>S.carteira?'disabled':''}>${v?brl(v):'Nada'}<small>${v?'para o cofrinho':'fica tudo na carteira'}</small></button>`).join('');
+  $('panel').innerHTML=`<h2 class="pop">Dia de mesada!</h2>
+   <div class="receipt">${linhas.join('')}<div><b>Na carteira agora</b><b class="num">${brl(S.carteira)}</b></div></div>
+   <p>Quanto você vai guardar no cofrinho antes de ver o que acontece nesta semana?</p>
+   <div class="save-row">${opts}</div>`;
+  $('panel').querySelector('.save-row').onclick=e=>{const b=e.target.closest('.choice');if(!b||b.disabled)return;const v=+b.dataset.v;
+    S.cofre+=v;S.carteira-=v;S.resumo.push({g:v}); if(v){sfx.coin();floatTxt('+'+brl(v),'#2FC46A',$('hCofre'));} else sfx.click(); hud(); setTimeout(evento, v?450:120);};
+}
+
+/* ---------- phase 2: evento ---------- */
+function podePagar(c){return S.carteira+S.cofre>=c;}
+function evento(){
+  const ev=EVENTS[S.sem];
+  $('scene').innerHTML=scene(ev.bg,ev.ac,ev.main,ev.props,ev.tag);
+  $('panel').innerHTML=`<h2 class="pop">${ev.t}</h2><p>${ev.p}</p>
+   <div class="choices">${ev.ops.map((o,i)=>{
+     const custo=o.cost||0, ok=o.parc?true:podePagar(custo);
+     const price=o.parc?`<span class="price r">${o.parc.n}× ${brl(o.parc.v)}</span>`:o.gain?`<span class="price g">+${brl(o.gain-custo)}</span>`:custo?`<span class="price r">−${brl(custo)}</span>`:`<span class="price">R$ 0</span>`;
+     return `<button class="choice" data-i="${i}" ${ok?'':'disabled'}><span>${o.txt}<small>${ok?o.sub:'Dinheiro insuficiente'}</small></span>${price}</button>`;}).join('')}</div>`;
+  $('panel').querySelector('.choices').onclick=e=>{const b=e.target.closest('.choice');if(!b||b.disabled)return;resolver(ev,ev.ops[+b.dataset.i]);};
+}
+
+/* ---------- phase 3: resultado ---------- */
+function resolver(ev,o){
+  const eff=[]; let tirou=0;
+  if(o.cost){ if(S.carteira>=o.cost){S.carteira-=o.cost;} else {tirou=o.cost-S.carteira;S.carteira=0;S.cofre-=tirou;} eff.push(['down',`Gastou ${brl(o.cost)}`]); }
+  if(o.gain){S.carteira+=o.gain;eff.push(['up',`Recebeu ${brl(o.gain)}`]);}
+  if(o.parc){S.parc.push({...o.parc});eff.push(['down',`${o.parc.n} parcelas de ${brl(o.parc.v)}`]);}
+  if(tirou) eff.push(['down',`Tirou ${brl(tirou)} do cofrinho`]);
+  if(o.f){S.feliz=Math.max(0,Math.min(5,S.feliz+o.f));eff.push([o.f>0?'up':'down',`${o.f>0?'+':''}${o.f} felicidade`]);}
+  if(o.golpe) S.golpe=true;
+  if(!eff.length) eff.push(['',`Nada mudou`]);
+  S.licoes.push({tag:o.lic[0],txt:o.lic[1],bad:!!o.golpe});
+  const good=!o.golpe && (o.f||0)>=0 && !tirou;
+  (o.golpe? sfx.bad : good? sfx.coin : sfx.click)();
+  hud();
+  const last=S.sem===WEEKS-1;
+  $('panel').innerHTML=`<h2 class="pop">${o.golpe?'Caiu no golpe!':o.txt}</h2>
+   <div class="effects">${eff.map(([c,t])=>`<span class="eff ${c}">${t}</span>`).join('')}</div>
+   <div class="lesson pop"><b>💡 ${o.lic[0]}</b>${o.lic[1]}</div>
+   <div class="row-end"><button class="big-btn" id="next">${last?'Ver resultado':'Próxima semana'}</button></div>`;
+  $('next').onclick=()=>{S.sem++; if(S.sem>=WEEKS) fim(); else semana();};
+  $('next').focus({preventScroll:true});
+}
+
+/* ---------- end ---------- */
+function fim(){
+  // parcelas restantes: paga do que tiver
+  S.parc.forEach(p=>{const tot=p.v*p.n; if(S.carteira>=tot)S.carteira-=tot; else {const f=tot-S.carteira;S.carteira=0; if(S.cofre>=f)S.cofre-=f; else {S.cofre=0;S.divida=true;}}}); S.parc=[];
+  const meta=S.cofre>=S.goal.valor, feliz=S.feliz>=3, seguro=!S.golpe&&!S.divida;
+  const n=[meta,feliz,seguro].filter(Boolean).length;
+  const badges=['Aprendiz da Grana','Poupador em Treino','Guardião do Cofrinho','Mestre da Grana'];
+  const total=S.cofre+S.carteira;
+  $('game').hidden=true;$('end').hidden=false;
+  $('endCard').innerHTML=`<h1>Missão cumprida!</h1>
+   <div class="stars" aria-label="${n} de 3 estrelas">${[0,1,2].map(i=>`<span class="${i<n?'':'off'}">⭐</span>`).join('')}</div>
+   <div class="badge">${badges[n]}</div>
+   <div style="display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center">
+     <svg viewBox="0 0 300 240">${pigSVG(Math.min(1,S.cofre/S.goal.valor),'e')}</svg>
+     <div style="font-size:17px;line-height:1.6">No cofrinho: <b class="num">${brl(S.cofre)}</b><br>Na carteira: <b class="num">${brl(S.carteira)}</b><br>Total que sobrou: <b class="num">${brl(total)}</b> de ${brl(MESADA*WEEKS)} recebidos</div>
+   </div>
+   <div class="checks">
+     <div class="check ${meta?'ok':'no'}"><span class="ic">${meta?'✓':'✗'}</span>${meta?`Juntou os ${brl(S.goal.valor)} do ${S.goal.nome.toLowerCase()}`:`Faltaram ${brl(S.goal.valor-S.cofre)} para a meta`}</div>
+     <div class="check ${feliz?'ok':'no'}"><span class="ic">${feliz?'✓':'✗'}</span>${feliz?'Terminou feliz, sem sofrimento':'Economizou demais e ficou triste'}</div>
+     <div class="check ${seguro?'ok':'no'}"><span class="ic">${seguro?'✓':'✗'}</span>${S.golpe?'Caiu em um golpe':S.divida?'Ficou devendo parcelas':'Sem golpes e sem dívidas'}</div>
+   </div>
+   <button class="big-btn pink" id="again">Jogar de novo</button>`;
+  $('learn').innerHTML=`<h2>O que você aprendeu</h2><ul>${S.licoes.map(l=>`<li><b>${l.tag}</b><span>${l.txt}</span></li>`).join('')}</ul>`;
+  $('again').onclick=()=>{sfx.click();$('end').hidden=true;$('start').hidden=false;chosen=null;$('startBtn').disabled=true;$('goals').querySelectorAll('.goal').forEach(x=>x.setAttribute('aria-pressed','false'));window.scrollTo(0,0);};
+  window.scrollTo(0,0);
+  if(n>=2){sfx.win();confetti();} else sfx.click();
+}
+
+/* ---------- confetti ---------- */
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c=$('confetti'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#FFD23F','#FF4F8B','#2FC46A','#8C6CFF','#FF8A34','#27B8F0'];
+  const ps=Array.from({length:160},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,vx:(Math.random()-.5)*4,vy:2+Math.random()*4,r:Math.random()*6,s:6+Math.random()*8,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore();});if(++t<260)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height);})();
+}
+</script>
+</body></html>
